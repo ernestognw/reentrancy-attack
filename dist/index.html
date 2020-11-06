@@ -1,12 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
-  
+  <div>
+    <h1>Ether Vault</h1>
+    <h2>My balance: <span id="vault-my-balance"></span></h2>
+    <h2>Ether Vault Contract balance: <span id="vault-balance"></span></h2>
+    <button id="vault-refresh">Refresh</button>
+    <form id="vault-deposit-form">
+      <input id="vault-deposit-amount" type="number" min="0" placeholder="ethers">
+      <button>Deposit</button>
+    </form>
+    <form id="vault-withdraw-form">
+      <input id="vault-withdraw-amount" type="number" min="0" placeholder="ethers">
+      <button>Withdraw</button>
+    </form>
+  </div>
+  <h1>Hacker</h1>
+  <h2>Hack contract balance: <span id="hacker-balance"></span></h2>
+  <h2>Hack contract balance in ether vault: <span id="hacker-vault-balance"></span></h2>
+  <button id="hacker-refresh">Refresh</button>
+  <form id="hacker-fund-form">
+    <input id="hacker-fund-amount" type="number" min="0" placeholder="ethers">
+    <button>Fund</button>
+  </form>
+  <div>
+    <button id="hacker-deposit">Deposit to EthVault</button>
+  </div>
+  <div>
+    <button id="hacker-attack">Attack</button>
+  </div>
+  <div>
+    <button id="hacker-withdraw">Withdraw funds</button>
+  </div>
+  </div>
   <script src="./main.js"></script>
 </body>
+
 </html>
