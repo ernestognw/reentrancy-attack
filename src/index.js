@@ -1,3 +1,5 @@
+const EtherVaultArtifact = require('../build/contracts/EtherVault.json');
+const HackerArtifact = require('../build/contracts/Hacker.json');
 const { ethers } = require('ethers');
 
 window.onload = async () => {
@@ -7,6 +9,17 @@ window.onload = async () => {
   const signer = provider.getSigner();
 
   // Contracts
+  const EtherVault = new ethers.Contract(
+    EtherVaultArtifact.networks['5777'].address,
+    EtherVaultArtifact.abi,
+    provider
+  ).connect(signer);
+
+  const Hacker = new ethers.Contract(
+    HackerArtifact.networks['5777'].address,
+    HackerArtifact.abi,
+    provider
+  ).connect(signer);
 
   // Elements
   const etherVault = {
@@ -37,21 +50,57 @@ window.onload = async () => {
   };
 
   // Functions
-  const depositEtherVault = async (event) => {};
+  const depositEtherVault = async (event) => {
+    event.preventDefault();
+    await signer.sendTransaction({
+      to: EtherVault.address,
+      value: ethers.utils.parseEther(etherVault.deposit.amount.value),
+    });
+  };
 
-  const withdrawEtherVault = async (event) => {};
+  const withdrawEtherVault = async (event) => {
+    event.preventDefault();
+    await EtherVault.withdraw(
+      ethers.utils.parseUnits(etherVault.withdraw.amount.value)
+    );
+  };
 
-  const calculateVaultBalances = async () => {};
+  const calculateVaultBalances = async () => {
+    const vaultBalance = await provider.getBalance(EtherVault.address);
+    const address = await signer.getAddress();
+    const myBalance = await EtherVault.balance(address);
+    etherVault.balance.innerText = ethers.utils.formatUnits(vaultBalance, 18);
+    etherVault.myBalance.innerText = ethers.utils.formatUnits(myBalance, 18);
+  };
 
-  const fundHacker = async (event) => {};
+  const fundHacker = async (event) => {
+    event.preventDefault();
+    await Hacker.fund({
+      value: ethers.utils.parseEther(hacker.fund.amount.value),
+    });
+  };
 
-  const depositHacker = async () => {};
+  const depositHacker = async () => {
+    Hacker.deposit();
+  };
 
-  const attackHacker = () => {};
+  const attackHacker = () => {
+    Hacker.attack();
+  };
 
-  const withdrawHacker = () => {};
+  const withdrawHacker = () => {
+    Hacker.withdraw();
+  };
 
-  const calculateHackerBalances = async () => {};
+  const calculateHackerBalances = async () => {
+    const hackerBalance = await provider.getBalance(Hacker.address);
+    const hackerBalanceInVault = await EtherVault.balance(Hacker.address);
+    hacker.balance.innerText = ethers.utils.formatUnits(hackerBalance, 18);
+    hacker.vaultBalance.innerText = ethers.utils.formatUnits(
+      hackerBalanceInVault,
+      18
+    );
+  };
 
   // Listeners
   etherVault.deposit.form.onsubmit = depositEtherVault;
